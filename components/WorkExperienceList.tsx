@@ -8,7 +8,7 @@ interface WorkExperienceListProps {
 }
 
 export default function WorkExperienceList({ workExperiences }: WorkExperienceListProps) {
-  const formatDate = (dateString: string | null) => {
+  const formatDate = (dateString: string | null | undefined) => {
     if (!dateString) return 'Present';
     return new Date(dateString).toLocaleDateString('en-US', { 
       year: 'numeric', 
