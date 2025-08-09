@@ -8,16 +8,25 @@ interface SkillListProps {
 }
 
 export default function SkillList({ skills }: SkillListProps) {
+  // Filter out any invalid skills and ensure they have required metadata
+  const validSkills = skills.filter(skill => 
+    skill && 
+    skill.metadata && 
+    skill.metadata.name && 
+    typeof skill.metadata.name === 'string'
+  );
+
   const categories = ['Frontend', 'Backend', 'DevOps', 'Tooling', 'Other'];
   
   const groupedSkills = categories.reduce((acc, category) => {
-    acc[category] = skills.filter(skill => 
-      skill.metadata.category?.value === category
+    acc[category] = validSkills.filter(skill => 
+      skill.metadata?.category?.value === category
     );
     return acc;
   }, {} as Record<string, Skill[]>);
 
-  const getProficiencyColor = (proficiency: string) => {
+  const getProficiencyColor = (proficiency?: string) => {
+    if (!proficiency) return 'bg-gray-400';
     switch (proficiency.toLowerCase()) {
       case 'expert': return 'bg-green-500';
       case 'advanced': return 'bg-blue-500';
@@ -26,6 +35,27 @@ export default function SkillList({ skills }: SkillListProps) {
       default: return 'bg-gray-400';
     }
   };
+
+  // Don't render if no valid skills
+  if (validSkills.length === 0) {
+    return (
+      <section id="skills" className="section-padding bg-gray-50">
+        <div className="container-custom">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Technical <span className="gradient-text">Skills</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Technologies and tools I use to bring ideas to life.
+            </p>
+          </div>
+          <div className="text-center text-gray-500">
+            <p>Skills will be displayed here once content is available.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="skills" className="section-padding bg-gray-50">
@@ -51,10 +81,10 @@ export default function SkillList({ skills }: SkillListProps) {
                   {categorySkills.map((skill) => (
                     <div key={skill.id} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        {skill.metadata.icon && (
+                        {skill.metadata?.icon?.imgix_url && (
                           <img 
                             src={`${skill.metadata.icon.imgix_url}?w=32&h=32&fit=crop&auto=format,compress`}
-                            alt={skill.metadata.name}
+                            alt={skill.metadata.name || 'Skill icon'}
                             className="w-8 h-8 rounded-md"
                           />
                         )}
@@ -68,7 +98,7 @@ export default function SkillList({ skills }: SkillListProps) {
                         </div>
                       </div>
                       
-                      {skill.metadata.proficiency && (
+                      {skill.metadata?.proficiency?.value && (
                         <div className="flex items-center space-x-2">
                           <div className={`w-2 h-2 rounded-full ${getProficiencyColor(skill.metadata.proficiency.value)}`}></div>
                           <Badge variant="secondary" className="text-xs">
