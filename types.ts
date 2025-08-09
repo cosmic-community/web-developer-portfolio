@@ -1,4 +1,4 @@
-interface CosmicObject {
+export interface CosmicObject {
   id: string;
   slug: string;
   title: string;
@@ -9,7 +9,7 @@ interface CosmicObject {
   modifiedAt: string;
 }
 
-interface Testimonial extends CosmicObject {
+export interface Testimonial extends CosmicObject {
   type: 'testimonials';
   metadata: {
     name: string;
@@ -24,7 +24,7 @@ interface Testimonial extends CosmicObject {
   };
 }
 
-interface WorkExperience extends CosmicObject {
+export interface WorkExperience extends CosmicObject {
   type: 'work-experience';
   metadata: {
     company: string;
@@ -41,7 +41,7 @@ interface WorkExperience extends CosmicObject {
   };
 }
 
-interface Skill extends CosmicObject {
+export interface Skill extends CosmicObject {
   type: 'skills';
   metadata: {
     name: string;
@@ -61,7 +61,7 @@ interface Skill extends CosmicObject {
   };
 }
 
-interface Project extends CosmicObject {
+export interface Project extends CosmicObject {
   type: 'projects';
   metadata: {
     title: string;
@@ -87,25 +87,25 @@ interface Project extends CosmicObject {
   };
 }
 
-type CosmicResponse<T> = {
+export type CosmicResponse<T> = {
   objects: T[];
   total: number;
   limit: number;
   skip: number;
 };
 
-function isTestimonial(obj: CosmicObject): obj is Testimonial {
+export function isTestimonial(obj: CosmicObject): obj is Testimonial {
   return obj.type === 'testimonials';
 }
 
-function isWorkExperience(obj: CosmicObject): obj is WorkExperience {
+export function isWorkExperience(obj: CosmicObject): obj is WorkExperience {
   return obj.type === 'work-experience';
 }
 
-function isSkill(obj: CosmicObject): obj is Skill {
+export function isSkill(obj: CosmicObject): obj is Skill {
   return obj.type === 'skills';
 }
 
-function isProject(obj: CosmicObject): obj is Project {
+export function isProject(obj: CosmicObject): obj is Project {
   return obj.type === 'projects';
 }
